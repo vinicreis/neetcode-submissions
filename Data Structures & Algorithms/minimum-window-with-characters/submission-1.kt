@@ -1,0 +1,51 @@
+class Solution {
+    /**
+
+        Given two strings s and t, return the shortest substring of s such that every character in t, including duplicates, is present in the substring. 
+        
+        If such a substring does not exist, return an empty string "".
+
+        You may assume that the correct output is always unique.
+
+     */
+    fun minWindow(s: String, t: String): String {
+        return bruteForce(s, t)
+    }
+
+    /**
+
+        s       = "abcdefghi"
+        t       = "cdh"
+        result  = "cdefgh"
+
+        for i in s.indices
+            for j in i + t.size until s.size
+                val substring = s.substring(i, j + 1)
+                
+                if (substring.containsAll(t)) return substring
+
+     */
+    private fun bruteForce(s: String, t: String): String {
+        if (s.isEmpty()) return ""
+        if (t.isEmpty()) return ""
+
+        var result = ""
+
+        for (i in s.indices) {
+            for (j in i + t.lastIndex until s.length) {
+                val substring = s.substring(i, j + 1)
+
+                // println("Evaluaing $substring from $i to $j")
+
+                result = when {
+                    substring.toList().containsAll(t.toList()).not() -> result
+                    result.isEmpty() -> substring
+                    result.length > j - i -> substring
+                    else -> result
+                }
+            }
+        }
+
+        return result
+    }
+}
